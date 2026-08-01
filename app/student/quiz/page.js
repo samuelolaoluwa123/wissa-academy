@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
@@ -65,6 +65,22 @@ function QuizTopbar({ isMobile, showTimer, secondsLeft, timerRed }) {
 
 /* ── Main component ── */
 export default function QuizPage() {
+  return (
+    <Suspense fallback={<QuizLoadingFallback />}>
+      <QuizPageContent />
+    </Suspense>
+  )
+}
+
+function QuizLoadingFallback() {
+  return (
+    <div style={{ minHeight:'100vh', background:'#eef1f6', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Inter,sans-serif' }}>
+      <div style={{ color:'#8a94a6', fontSize:'14px' }}>Loading...</div>
+    </div>
+  )
+}
+
+function QuizPageContent() {
   const router       = useRouter()
   const searchParams  = useSearchParams()
   const quizId        = searchParams.get('quizId')
