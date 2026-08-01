@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes progressFill {
+  from { width: 0%; }
+}
+@keyframes barRise {
+  from { height: 0%; opacity: 0; }
+}
+
+.anim-fade-in    { animation: fadeIn     0.4s ease both; }
+.anim-slide-up   { animation: slideUp    0.45s ease both; }
+.anim-scale-in   { animation: scaleIn    0.3s ease both; }
+.anim-slide-left { animation: slideInLeft 0.35s ease both; }
+
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.10s; }
+.d3 { animation-delay: 0.15s; }
+.d4 { animation-delay: 0.20s; }
+.d5 { animation-delay: 0.25s; }
+.d6 { animation-delay: 0.30s; }
+
+.progress-bar-anim { animation: progressFill 1s ease both; }
+.bar-rise          { animation: barRise 0.5s ease both; }
