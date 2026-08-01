@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -16,17 +21,20 @@
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
 }
+/* Transform-based, not width/height — cheaper to animate (GPU, no layout thrash) */
 @keyframes progressFill {
-  from { width: 0%; }
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 @keyframes barRise {
-  from { height: 0%; opacity: 0; }
+  from { transform: scaleY(0); opacity: 0; }
+  to   { transform: scaleY(1); opacity: 1; }
 }
 
-.anim-fade-in    { animation: fadeIn     0.4s ease both; }
-.anim-slide-up   { animation: slideUp    0.45s ease both; }
-.anim-scale-in   { animation: scaleIn    0.3s ease both; }
-.anim-slide-left { animation: slideInLeft 0.35s ease both; }
+.anim-fade-in    { animation: fadeIn     0.4s var(--ease-out) both; }
+.anim-slide-up   { animation: slideUp    0.45s var(--ease-out) both; }
+.anim-scale-in   { animation: scaleIn    0.3s var(--ease-out) both; }
+.anim-slide-left { animation: slideInLeft 0.35s var(--ease-out) both; }
 
 .d1 { animation-delay: 0.05s; }
 .d2 { animation-delay: 0.10s; }
@@ -35,5 +43,50 @@
 .d5 { animation-delay: 0.25s; }
 .d6 { animation-delay: 0.30s; }
 
-.progress-bar-anim { animation: progressFill 1s ease both; }
-.bar-rise          { animation: barRise 0.5s ease both; }
+/* transform-origin set per-axis so the fill/rise reads as growing from a fixed edge, not scaling from center */
+.progress-bar-anim { animation: progressFill 0.8s var(--ease-out) both; transform-origin: left; }
+.bar-rise          { animation: barRise 0.45s var(--ease-out) both; transform-origin: bottom; }
+
+/* Reusable interactive utilities — hover/press feedback for cards, buttons, rows */
+.hover-lift {
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), border-color 0.2s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+  }
+}
+
+.press-btn {
+  transition: transform 0.15s var(--ease-out), box-shadow 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .press-btn:hover { transform: translateY(-1px); }
+}
+.press-btn:active { transform: scale(0.97); }
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.94); }
+}
+.anim-pulse { animation: pulseSoft 1.4s var(--ease-in-out) infinite; }
+
+.row-hover {
+  transition: background 0.2s ease, transform 0.15s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .row-hover:hover { transform: translateX(2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-in, .anim-slide-up, .anim-scale-in, .anim-slide-left, .anim-pulse,
+  .progress-bar-anim, .bar-rise {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .hover-lift:hover, .press-btn:hover, .press-btn:active, .row-hover:hover {
+    transform: none !important;
+  }
+}
