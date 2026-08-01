@@ -1,9 +1,25 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
 
 export default function TutorInvitePage() {
+  return (
+    <Suspense fallback={<InviteLoadingFallback />}>
+      <TutorInviteContent />
+    </Suspense>
+  )
+}
+
+function InviteLoadingFallback() {
+  return (
+    <div style={{ minHeight: '100vh', background: '#eef1f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ color: '#8a94a6', fontSize: '14px' }}>Loading...</div>
+    </div>
+  )
+}
+
+function TutorInviteContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const token = searchParams.get('token')
