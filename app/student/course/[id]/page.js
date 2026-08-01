@@ -40,12 +40,12 @@ function NotesTab({ notes, noteText, onNoteChange, onSave }) {
       <h3 style={{ fontSize:'16px', fontWeight:700, color:'#1a1a2e', margin:'0 0 12px' }}>My Notes</h3>
       <textarea value={noteText} onChange={e => onNoteChange(e.target.value)} placeholder="Type your notes here..."
         rows={4} style={{ width:'100%', padding:'12px', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13.5px', resize:'vertical', outline:'none', fontFamily:'Inter,sans-serif', color:'#1a1a2e', boxSizing:'border-box', marginBottom:'10px' }} />
-      <button onClick={onSave} style={{ padding:'9px 20px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'8px', color:'#fff', fontWeight:700, fontSize:'13px', cursor:'pointer', marginBottom:'20px' }}>Save Note</button>
+      <button onClick={onSave} className="press-btn" style={{ padding:'9px 20px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'8px', color:'#fff', fontWeight:700, fontSize:'13px', cursor:'pointer', marginBottom:'20px' }}>Save Note</button>
       {notes.length > 0 && (
         <div>
           <h4 style={{ fontSize:'14px', fontWeight:600, color:'#1a1a2e', margin:'0 0 10px' }}>Saved notes</h4>
           {notes.map((n, i) => (
-            <div key={i} style={{ padding:'12px', background:'#f9fafb', borderRadius:'10px', marginBottom:'8px', fontSize:'13.5px', color:'#444', lineHeight:1.5, borderLeft:'3px solid #4a9eff' }}>{n}</div>
+            <div key={i} className="row-hover" style={{ padding:'12px', background:'#f9fafb', borderRadius:'10px', marginBottom:'8px', fontSize:'13.5px', color:'#444', lineHeight:1.5, borderLeft:'3px solid #4a9eff' }}>{n}</div>
           ))}
         </div>
       )}
@@ -63,13 +63,13 @@ function ResourcesTab() {
     <div className="anim-fade-in">
       <h3 style={{ fontSize:'16px', fontWeight:700, color:'#1a1a2e', margin:'0 0 14px' }}>Downloadable Resources</h3>
       {resources.map((r, i) => (
-        <div key={i} style={{ display:'flex', alignItems:'center', gap:'12px', padding:'12px 14px', background:'#f9fafb', borderRadius:'10px', marginBottom:'8px', border:'1px solid rgba(0,0,0,0.05)' }}>
+        <div key={i} className="hover-lift" style={{ display:'flex', alignItems:'center', gap:'12px', padding:'12px 14px', background:'#f9fafb', borderRadius:'10px', marginBottom:'8px', border:'1px solid rgba(0,0,0,0.05)' }}>
           <span style={{ fontSize:'20px' }}>{r.icon}</span>
           <div style={{ flex:1 }}>
             <div style={{ fontWeight:600, fontSize:'13.5px', color:'#1a1a2e' }}>{r.name}</div>
             <div style={{ fontSize:'11.5px', color:'#8a94a6' }}>{r.size}</div>
           </div>
-          <button style={{ padding:'6px 14px', background:'rgba(74,158,255,0.1)', border:'1.5px solid #4a9eff', borderRadius:'8px', color:'#4a9eff', fontSize:'12.5px', fontWeight:600, cursor:'pointer' }}>Download</button>
+          <button className="press-btn" style={{ padding:'6px 14px', background:'rgba(74,158,255,0.1)', border:'1.5px solid #4a9eff', borderRadius:'8px', color:'#4a9eff', fontSize:'12.5px', fontWeight:600, cursor:'pointer' }}>Download</button>
         </div>
       ))}
     </div>
@@ -82,9 +82,9 @@ function DiscussionTab({ comments, commentText, onCommentChange, onPost }) {
       <h3 style={{ fontSize:'16px', fontWeight:700, color:'#1a1a2e', margin:'0 0 12px' }}>Discussion</h3>
       <textarea value={commentText} onChange={e => onCommentChange(e.target.value)} placeholder="Ask a question or share a thought..."
         rows={3} style={{ width:'100%', padding:'12px', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13.5px', resize:'vertical', outline:'none', fontFamily:'Inter,sans-serif', color:'#1a1a2e', boxSizing:'border-box', marginBottom:'10px' }} />
-      <button onClick={onPost} style={{ padding:'9px 20px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'8px', color:'#fff', fontWeight:700, fontSize:'13px', cursor:'pointer', marginBottom:'20px' }}>Post Comment</button>
+      <button onClick={onPost} className="press-btn" style={{ padding:'9px 20px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'8px', color:'#fff', fontWeight:700, fontSize:'13px', cursor:'pointer', marginBottom:'20px' }}>Post Comment</button>
       {comments.map((c, i) => (
-        <div key={i} style={{ display:'flex', gap:'10px', padding:'12px', background:'#f9fafb', borderRadius:'10px', marginBottom:'8px' }}>
+        <div key={i} className="row-hover" style={{ display:'flex', gap:'10px', padding:'12px', background:'#f9fafb', borderRadius:'10px', marginBottom:'8px' }}>
           <div style={{ width:32, height:32, borderRadius:'50%', background:'#1e3a5f', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, color:'#4a9eff', flexShrink:0 }}>{c.author?.charAt(0) || 'S'}</div>
           <div>
             <div style={{ fontWeight:600, fontSize:'12.5px', color:'#1a1a2e', marginBottom:'3px' }}>{c.author || 'Student'}</div>
@@ -116,7 +116,7 @@ function LessonSidebar({ allLessons, current, completed, onSelect, course }) {
       <div style={{ padding:'18px 18px 16px', borderBottom:'1px solid #eee' }}>
         <div style={{ fontSize:'13.5px', fontWeight:700, color:'#1a1a2e', marginBottom:'8px' }}>{course.title}</div>
         <div style={{ height:6, background:'#eef1f6', borderRadius:3, overflow:'hidden', marginBottom:'6px' }}>
-          <div style={{ height:'100%', width:`${pct}%`, background:'#4a9eff', borderRadius:3, transition:'width 0.4s' }} />
+          <div style={{ height:'100%', width:`${pct}%`, background:'#4a9eff', borderRadius:3, transition:'width 0.4s var(--ease-out)' }} />
         </div>
         <div style={{ fontSize:'11.5px', color:'#8a94a6' }}>{doneCount} of {allLessons.length} lessons completed</div>
       </div>
@@ -136,6 +136,7 @@ function LessonSidebar({ allLessons, current, completed, onSelect, course }) {
                 key={lesson.id}
                 onClick={() => !isLocked && onSelect(globalIdx)}
                 disabled={isLocked}
+                className="lesson-item"
                 style={{
                   width:'100%', display:'flex', alignItems:'center', gap:'10px',
                   paddingTop:'10px', paddingBottom:'10px', paddingLeft:'18px', paddingRight:'16px',
@@ -143,9 +144,10 @@ function LessonSidebar({ allLessons, current, completed, onSelect, course }) {
                   border:'none', borderLeft: isActive ? '3px solid #4a9eff' : '3px solid transparent',
                   cursor: isLocked ? 'not-allowed' : 'pointer', textAlign:'left',
                   opacity: isLocked ? 0.5 : 1,
+                  transition:'background 0.2s ease, border-color 0.2s ease',
                 }}
               >
-                <div style={{ width:20, height:20, borderRadius:'50%', flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px', fontWeight:700, background: isDone ? 'rgba(62,232,122,0.15)' : isLocked ? '#f0f0f0' : isActive ? 'rgba(74,158,255,0.15)' : '#eef1f6', color: isDone ? '#3ee87a' : isLocked ? '#b0b8c8' : isActive ? '#4a9eff' : '#8a94a6' }}>
+                <div style={{ width:20, height:20, borderRadius:'50%', flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px', fontWeight:700, background: isDone ? 'rgba(62,232,122,0.15)' : isLocked ? '#f0f0f0' : isActive ? 'rgba(74,158,255,0.15)' : '#eef1f6', color: isDone ? '#3ee87a' : isLocked ? '#b0b8c8' : isActive ? '#4a9eff' : '#8a94a6', transition:'background 0.2s ease, color 0.2s ease' }}>
                   {isDone ? '✓' : isLocked ? '🔒' : lesson.type === 'quiz' ? '📝' : ''}
                 </div>
                 <div style={{ flex:1, minWidth:0 }}>
@@ -156,6 +158,15 @@ function LessonSidebar({ allLessons, current, completed, onSelect, course }) {
           })}
         </div>
       ))}
+
+      <style jsx>{`
+        :global(.lesson-item:not(:disabled):hover) {
+          background: rgba(74, 158, 255, 0.05) !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.lesson-item) { transition: none !important; }
+        }
+      `}</style>
     </div>
   )
 }
@@ -486,7 +497,7 @@ export default function TakeCoursePage() {
     return (
       <div style={{ minHeight:'100vh', background:'#0f1b2d', display:'flex', alignItems:'center', justifyContent:'center' }}>
         <div style={{ textAlign:'center', color:'rgba(255,255,255,0.6)' }}>
-          <div style={{ fontSize:'32px', marginBottom:'12px' }}>⏳</div>
+          <div className="anim-pulse" style={{ fontSize:'32px', marginBottom:'12px' }}>⏳</div>
           <div style={{ fontSize:'14px' }}>Loading course...</div>
         </div>
       </div>
@@ -496,12 +507,12 @@ export default function TakeCoursePage() {
   if (notEnrolled) {
     return (
       <div style={{ minHeight:'100vh', background:'#eef1f6', display:'flex', alignItems:'center', justifyContent:'center', padding:'20px' }}>
-        <div style={{ textAlign:'center', maxWidth:400 }}>
+        <div className="anim-slide-up" style={{ textAlign:'center', maxWidth:400 }}>
           <div style={{ fontSize:'48px', marginBottom:'16px' }}>🔒</div>
           <h1 style={{ fontSize:'20px', fontWeight:800, color:'#1a1a2e', margin:'0 0 8px' }}>Not enrolled yet</h1>
           <p style={{ fontSize:'14px', color:'#8a94a6', marginBottom:'24px' }}>You need to enrol in this course before you can start learning.</p>
           <Link href={`/courses/${courseId}`} style={{ textDecoration:'none' }}>
-            <button style={{ padding:'11px 28px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', color:'#fff', fontWeight:700, fontSize:'14px', cursor:'pointer' }}>View Course</button>
+            <button className="press-btn" style={{ padding:'11px 28px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', color:'#fff', fontWeight:700, fontSize:'14px', cursor:'pointer' }}>View Course</button>
           </Link>
         </div>
       </div>
@@ -529,19 +540,19 @@ export default function TakeCoursePage() {
       {/* Topbar */}
       <div style={{ position:'fixed', top:0, left:0, right:0, height:56, background:'#0f1b2d', borderBottom:'1px solid rgba(255,255,255,0.07)', display:'flex', alignItems:'center', paddingLeft: isMobile?'12px':'24px', paddingRight: isMobile?'12px':'24px', gap:'12px', zIndex:100 }}>
         <Link href="/student/dashboard" style={{ textDecoration:'none' }}>
-          <button style={{ background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', paddingTop:'6px', paddingBottom:'6px', paddingLeft:'12px', paddingRight:'12px', borderRadius:'8px', color:'rgba(255,255,255,0.75)', fontSize:'13px' }}>← Back</button>
+          <button className="press-btn" style={{ background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', paddingTop:'6px', paddingBottom:'6px', paddingLeft:'12px', paddingRight:'12px', borderRadius:'8px', color:'rgba(255,255,255,0.75)', fontSize:'13px' }}>← Back</button>
         </Link>
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ color:'#fff', fontWeight:700, fontSize: isMobile?'13px':'14.5px', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{course.title}</div>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:'8px', flexShrink:0 }}>
           <div style={{ width: isMobile?60:100, height:4, background:'rgba(255,255,255,0.15)', borderRadius:2, overflow:'hidden' }}>
-            <div style={{ height:'100%', width:`${progressPct}%`, background:'#4a9eff', borderRadius:2, transition:'width 0.5s' }} />
+            <div style={{ height:'100%', width:`${progressPct}%`, background:'#4a9eff', borderRadius:2, transition:'width 0.5s var(--ease-out)' }} />
           </div>
           <span style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', whiteSpace:'nowrap' }}>{progressPct}%</span>
         </div>
         {isMobile && (
-          <button onClick={() => setSidebarOpen(o => !o)} style={{ background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', paddingTop:'6px', paddingBottom:'6px', paddingLeft:'12px', paddingRight:'12px', borderRadius:'8px', color:'rgba(255,255,255,0.75)', fontSize:'12px' }}>Lessons</button>
+          <button onClick={() => setSidebarOpen(o => !o)} className="press-btn" style={{ background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', paddingTop:'6px', paddingBottom:'6px', paddingLeft:'12px', paddingRight:'12px', borderRadius:'8px', color:'rgba(255,255,255,0.75)', fontSize:'12px' }}>Lessons</button>
         )}
       </div>
 
@@ -557,7 +568,7 @@ export default function TakeCoursePage() {
         <div style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.06)', overflow:'hidden' }}>
           {/* Video player OR Quiz card, depending on lesson type */}
           {isQuizLesson ? (
-            <div style={{ background:'linear-gradient(135deg,#0f1b2d,#1a2d45)', borderRadius:'14px 14px 0 0', minHeight: isMobile ? '220px' : '320px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'14px', padding:'20px' }}>
+            <div className="anim-fade-in" style={{ background:'linear-gradient(135deg,#0f1b2d,#1a2d45)', borderRadius:'14px 14px 0 0', minHeight: isMobile ? '220px' : '320px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'14px', padding:'20px' }}>
               <div style={{ fontSize: isMobile?'32px':'48px' }}>📝</div>
               <div style={{ color:'#fff', fontWeight:700, fontSize: isMobile?'15px':'18px', textAlign:'center' }}>{lesson.title}</div>
               {quizForLesson && (
@@ -567,7 +578,7 @@ export default function TakeCoursePage() {
               )}
               {quizForLesson ? (
                 <Link href={`/student/quiz?quizId=${quizForLesson.id}`} style={{ textDecoration:'none' }}>
-                  <button disabled={isLessonLocked} style={{ padding:'12px 28px', background: isLessonLocked ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', color:'#fff', fontWeight:700, fontSize:'14px', cursor: isLessonLocked ? 'not-allowed' : 'pointer' }}>
+                  <button disabled={isLessonLocked} className="press-btn" style={{ padding:'12px 28px', background: isLessonLocked ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', color:'#fff', fontWeight:700, fontSize:'14px', cursor: isLessonLocked ? 'not-allowed' : 'pointer' }}>
                     {isLessonLocked ? '🔒 Locked' : 'Start Quiz →'}
                   </button>
                 </Link>
@@ -581,15 +592,15 @@ export default function TakeCoursePage() {
 
           {/* Lesson nav */}
           <div style={{ background:'#1a2d45', display:'flex', alignItems:'center', gap:'10px', paddingTop:'10px', paddingBottom:'10px', paddingLeft: isMobile?'12px':'20px', paddingRight: isMobile?'12px':'20px' }}>
-            <button onClick={() => setCurrent(Math.max(0, currentLesson - 1))} disabled={currentLesson === 0} style={{ paddingTop:'7px', paddingBottom:'7px', paddingLeft:'14px', paddingRight:'14px', background:'rgba(255,255,255,0.08)', border:'none', borderRadius:'8px', color: currentLesson===0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', cursor: currentLesson===0 ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:600 }}>← Prev</button>
-            <button onClick={handleMarkComplete} disabled={isDone || marking || isLessonLocked} style={{ flex:1, paddingTop:'7px', paddingBottom:'7px', background: isDone ? 'rgba(62,232,122,0.15)' : isLessonLocked ? 'rgba(255,255,255,0.05)' : 'rgba(74,158,255,0.2)', border: `1.5px solid ${isDone ? '#3ee87a' : isLessonLocked ? 'rgba(255,255,255,0.1)' : '#4a9eff'}`, borderRadius:'8px', color: isDone ? '#3ee87a' : isLessonLocked ? 'rgba(255,255,255,0.3)' : '#4a9eff', cursor: (isDone || isLessonLocked) ? 'default' : 'pointer', fontSize:'13px', fontWeight:700 }}>
+            <button onClick={() => setCurrent(Math.max(0, currentLesson - 1))} disabled={currentLesson === 0} className="press-btn" style={{ paddingTop:'7px', paddingBottom:'7px', paddingLeft:'14px', paddingRight:'14px', background:'rgba(255,255,255,0.08)', border:'none', borderRadius:'8px', color: currentLesson===0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', cursor: currentLesson===0 ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:600 }}>← Prev</button>
+            <button onClick={handleMarkComplete} disabled={isDone || marking || isLessonLocked} className="press-btn" style={{ flex:1, paddingTop:'7px', paddingBottom:'7px', background: isDone ? 'rgba(62,232,122,0.15)' : isLessonLocked ? 'rgba(255,255,255,0.05)' : 'rgba(74,158,255,0.2)', border: `1.5px solid ${isDone ? '#3ee87a' : isLessonLocked ? 'rgba(255,255,255,0.1)' : '#4a9eff'}`, borderRadius:'8px', color: isDone ? '#3ee87a' : isLessonLocked ? 'rgba(255,255,255,0.3)' : '#4a9eff', cursor: (isDone || isLessonLocked) ? 'default' : 'pointer', fontSize:'13px', fontWeight:700, transition:'background 0.2s ease, border-color 0.2s ease, color 0.2s ease' }}>
               {marking ? 'Saving...' : isDone ? '✓ Completed' : isLessonLocked ? '🔒 Locked' : isQuizLesson ? 'Mark Quiz Lesson Complete' : 'Mark Complete'}
             </button>
-            <button onClick={() => setCurrent(Math.min(totalLessons - 1, currentLesson + 1))} disabled={currentLesson === totalLessons - 1 || !isDone} style={{ paddingTop:'7px', paddingBottom:'7px', paddingLeft:'14px', paddingRight:'14px', background:'rgba(255,255,255,0.08)', border:'none', borderRadius:'8px', color: (currentLesson===totalLessons-1 || !isDone) ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', cursor: (currentLesson===totalLessons-1 || !isDone) ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:600 }}>Next →</button>
+            <button onClick={() => setCurrent(Math.min(totalLessons - 1, currentLesson + 1))} disabled={currentLesson === totalLessons - 1 || !isDone} className="press-btn" style={{ paddingTop:'7px', paddingBottom:'7px', paddingLeft:'14px', paddingRight:'14px', background:'rgba(255,255,255,0.08)', border:'none', borderRadius:'8px', color: (currentLesson===totalLessons-1 || !isDone) ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)', cursor: (currentLesson===totalLessons-1 || !isDone) ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:600 }}>Next →</button>
           </div>
 
           {isLessonLocked && (
-            <div style={{ background:'#fff3cd', padding:'10px 20px', fontSize:'12.5px', color:'#856404', display:'flex', alignItems:'center', gap:'8px' }}>
+            <div className="anim-fade-in" style={{ background:'#fff3cd', padding:'10px 20px', fontSize:'12.5px', color:'#856404', display:'flex', alignItems:'center', gap:'8px' }}>
               🔒 Complete the previous lesson before you can access this one.
             </div>
           )}
@@ -598,7 +609,7 @@ export default function TakeCoursePage() {
           <div style={{ background:'#fff', borderRadius:'0 0 14px 14px' }}>
             <div style={{ display:'flex', borderBottom:'2px solid #e2e6ed', overflowX:'auto' }}>
               {TABS.map(tab => (
-                <button key={tab} onClick={() => setActiveTab(tab)} style={{ background:'none', border:'none', cursor:'pointer', paddingTop:'12px', paddingBottom:'12px', paddingLeft:'18px', paddingRight:'18px', fontSize:'13.5px', fontWeight: activeTab===tab?700:500, color: activeTab===tab?'#4a9eff':'#8a94a6', borderBottom: activeTab===tab?'2px solid #4a9eff':'2px solid transparent', marginBottom:'-2px', textTransform:'capitalize', whiteSpace:'nowrap' }}>{tab}</button>
+                <button key={tab} onClick={() => setActiveTab(tab)} style={{ background:'none', border:'none', cursor:'pointer', paddingTop:'12px', paddingBottom:'12px', paddingLeft:'18px', paddingRight:'18px', fontSize:'13.5px', fontWeight: activeTab===tab?700:500, color: activeTab===tab?'#4a9eff':'#8a94a6', borderBottom: activeTab===tab?'2px solid #4a9eff':'2px solid transparent', marginBottom:'-2px', textTransform:'capitalize', whiteSpace:'nowrap', transition:'color 0.2s ease, border-color 0.2s ease' }}>{tab}</button>
               ))}
             </div>
             <div style={{ padding: isMobile?'16px':'24px' }}>
@@ -620,11 +631,11 @@ export default function TakeCoursePage() {
 
       {isMobile && sidebarOpen && (
         <>
-          <div onClick={() => setSidebarOpen(false)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:199 }} />
-          <div style={{ position:'fixed', bottom:0, left:0, right:0, background:'#fff', borderRadius:'20px 20px 0 0', zIndex:200, maxHeight:'70vh', overflowY:'auto' }}>
+          <div onClick={() => setSidebarOpen(false)} className="anim-fade-in" style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:199 }} />
+          <div className="anim-slide-up" style={{ position:'fixed', bottom:0, left:0, right:0, background:'#fff', borderRadius:'20px 20px 0 0', zIndex:200, maxHeight:'70vh', overflowY:'auto' }}>
             <div style={{ padding:'16px 20px', borderBottom:'1px solid #eee', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <span style={{ fontWeight:700, fontSize:'15px', color:'#1a1a2e' }}>Lessons</span>
-              <button onClick={() => setSidebarOpen(false)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#8a94a6' }}>✕</button>
+              <button onClick={() => setSidebarOpen(false)} className="press-btn" style={{ background:'none', border:'none', cursor:'pointer', fontSize:'18px', color:'#8a94a6' }}>✕</button>
             </div>
             <LessonSidebar allLessons={allLessons} current={currentLesson} completed={completedLessons} onSelect={idx => { setCurrent(idx); setSidebarOpen(false) }} course={course} />
           </div>
