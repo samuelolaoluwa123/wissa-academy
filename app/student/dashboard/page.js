@@ -12,9 +12,9 @@ const BARS = [
 ]
 
 /* ── Small reusable components defined OUTSIDE main component ── */
-function Card({ children, style }) {
+function Card({ children, style, className = '' }) {
   return (
-    <div style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', ...style }}>
+    <div className={`hover-lift ${className}`} style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', ...style }}>
       {children}
     </div>
   )
@@ -29,7 +29,7 @@ function SectionHeader({ title, subtitle, action, actionHref }) {
       </div>
       {action && (
         <Link href={actionHref || '#'} style={{ textDecoration:'none' }}>
-          <button style={{ padding:'6px 14px', background:'none', border:'1.5px solid #e2e6ed', borderRadius:'8px', fontSize:'12.5px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>
+          <button className="press-btn" style={{ padding:'6px 14px', background:'none', border:'1.5px solid #e2e6ed', borderRadius:'8px', fontSize:'12.5px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>
             {action}
           </button>
         </Link>
@@ -38,11 +38,11 @@ function SectionHeader({ title, subtitle, action, actionHref }) {
   )
 }
 
-function StatCard({ label, value, pill, pillColor, dark }) {
+function StatCard({ label, value, pill, pillColor, dark, className = '' }) {
   const pillBg   = { blue:'rgba(74,158,255,0.15)', green:'rgba(62,232,122,0.15)', amber:'rgba(245,166,35,0.15)', purple:'rgba(140,100,255,0.15)' }
   const pillText = { blue:'#4a9eff', green:'#3ee87a', amber:'#f5a623', purple:'#8c64ff' }
   return (
-    <div style={{ background: dark ? '#1a2d45' : '#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding:'20px 22px' }}>
+    <div className={`hover-lift ${className}`} style={{ background: dark ? '#1a2d45' : '#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding:'20px 22px' }}>
       <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'1px', textTransform:'uppercase', color: dark ? 'rgba(255,255,255,0.4)' : '#8a94a6', marginBottom:'8px' }}>{label}</div>
       <div style={{ fontSize:'36px', fontWeight:900, color: dark ? '#fff' : '#1a1a2e', lineHeight:1, marginBottom:'10px' }}>{value}</div>
       <span style={{ display:'inline-block', padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:700, background: pillBg[pillColor] || pillBg.blue, color: pillText[pillColor] || pillText.blue }}>{pill}</span>
@@ -148,7 +148,7 @@ export default function StudentDashboard() {
       <DashboardShell role="student">
         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'80vh' }}>
           <div style={{ textAlign:'center' }}>
-            <div style={{ fontSize:'32px', marginBottom:'12px' }}>⏳</div>
+            <div className="anim-pulse" style={{ fontSize:'32px', marginBottom:'12px' }}>⏳</div>
             <div style={{ fontSize:'14px', color:'#8a94a6' }}>Loading your dashboard...</div>
           </div>
         </div>
@@ -161,7 +161,7 @@ export default function StudentDashboard() {
       <div style={{ paddingTop:pad, paddingLeft:pad, paddingRight:pad, paddingBottom:'40px' }}>
 
         {/* Header */}
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems: isMobile ? 'flex-start' : 'center', flexDirection: isMobile ? 'column' : 'row', gap:'12px', marginBottom: isMobile ? '16px' : '24px' }}>
+        <div className="anim-slide-up" style={{ display:'flex', justifyContent:'space-between', alignItems: isMobile ? 'flex-start' : 'center', flexDirection: isMobile ? 'column' : 'row', gap:'12px', marginBottom: isMobile ? '16px' : '24px' }}>
           <div>
             <div style={{ fontSize:'11px', fontWeight:700, letterSpacing:'1.5px', color:'#8a94a6', textTransform:'uppercase', marginBottom:'4px' }}>STUDENT PORTAL</div>
             <h1 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight:800, color:'#1a1a2e', margin:'0 0 4px', letterSpacing:'-0.5px' }}>
@@ -179,10 +179,10 @@ export default function StudentDashboard() {
           {!isMobile && (
             <div style={{ display:'flex', gap:'10px', flexShrink:0 }}>
               <Link href="/courses" style={{ textDecoration:'none' }}>
-                <button style={{ padding:'9px 18px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>Browse courses</button>
+                <button className="press-btn" style={{ padding:'9px 18px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>Browse courses</button>
               </Link>
               <Link href={enrollments[0] ? `/student/course/${enrollments[0].course?.id}` : '/courses'} style={{ textDecoration:'none' }}>
-                <button style={{ padding:'9px 18px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'13px', fontWeight:700, color:'#fff', cursor:'pointer', boxShadow:'0 4px 14px rgba(74,158,255,0.35)' }}>Continue learning</button>
+                <button className="press-btn" style={{ padding:'9px 18px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'13px', fontWeight:700, color:'#fff', cursor:'pointer', boxShadow:'0 4px 14px rgba(74,158,255,0.35)' }}>Continue learning</button>
               </Link>
             </div>
           )}
@@ -190,10 +190,10 @@ export default function StudentDashboard() {
 
         {/* Stat cards */}
         <div style={{ display:'grid', gridTemplateColumns:statsGrid, gap, marginBottom:gap }}>
-          <StatCard label="Learning Score (XP)" value={xp.toLocaleString()} pill={xp >= 1000 ? 'Level 2' : `Next: 1000`} pillColor="green" dark />
-          <StatCard label="Courses Enrolled"  value={enrollments.length} pill={enrollments.filter(e=>e.status==='active').length > 0 ? `${enrollments.filter(e=>e.status==='active').length} in progress` : 'None yet'} pillColor="blue" />
-          <StatCard label="Hours Learned"     value={`${hoursLearned}h`} pill={streak > 0 ? `🔥 ${streak} day streak` : 'Start learning'} pillColor="amber" />
-          <StatCard label="Certificates"      value={certCount} pill={certCount > 0 ? 'Earned' : 'Complete a course'} pillColor="purple" />
+          <StatCard className="anim-scale-in d1" label="Learning Score (XP)" value={xp.toLocaleString()} pill={xp >= 1000 ? 'Level 2' : `Next: 1000`} pillColor="green" dark />
+          <StatCard className="anim-scale-in d2" label="Courses Enrolled"  value={enrollments.length} pill={enrollments.filter(e=>e.status==='active').length > 0 ? `${enrollments.filter(e=>e.status==='active').length} in progress` : 'None yet'} pillColor="blue" />
+          <StatCard className="anim-scale-in d3" label="Hours Learned"     value={`${hoursLearned}h`} pill={streak > 0 ? `🔥 ${streak} day streak` : 'Start learning'} pillColor="amber" />
+          <StatCard className="anim-scale-in d4" label="Certificates"      value={certCount} pill={certCount > 0 ? 'Earned' : 'Complete a course'} pillColor="purple" />
         </div>
 
         {/* Body */}
@@ -203,7 +203,7 @@ export default function StudentDashboard() {
           <div style={{ display:'flex', flexDirection:'column', gap }}>
 
             {/* My Courses */}
-            <Card style={{ padding:cardPad }}>
+            <Card className="anim-slide-up d1" style={{ padding:cardPad }}>
               <SectionHeader title="My courses" subtitle="Your enrolled courses" action="Browse all" actionHref="/courses" />
               {enrollments.length === 0 ? (
                 <div style={{ textAlign:'center', padding:'28px 0' }}>
@@ -216,7 +216,7 @@ export default function StudentDashboard() {
                 </div>
               ) : (
                 enrollments.map((enr, i) => (
-                  <div key={enr.id} style={{ display:'flex', alignItems:'center', gap:'12px', paddingBottom: i < enrollments.length-1 ? '14px' : '0', marginBottom: i < enrollments.length-1 ? '14px' : '0', borderBottom: i < enrollments.length-1 ? '1px solid #f5f5f5' : 'none' }}>
+                  <div key={enr.id} className="row-hover" style={{ display:'flex', alignItems:'center', gap:'12px', paddingBottom: i < enrollments.length-1 ? '14px' : '0', marginBottom: i < enrollments.length-1 ? '14px' : '0', borderBottom: i < enrollments.length-1 ? '1px solid #f5f5f5' : 'none' }}>
                     <div style={{ width:38, height:38, borderRadius:'10px', flexShrink:0, background: enr.course?.gradient || 'linear-gradient(135deg,#4a9eff,#1e3a5f)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'16px' }}>
                       {enr.course?.icon || '📚'}
                     </div>
@@ -230,7 +230,7 @@ export default function StudentDashboard() {
                     <div style={{ textAlign:'right', flexShrink:0 }}>
                       <div style={{ fontSize:'13px', fontWeight:700, color:'#4a9eff', marginBottom:'6px' }}>{enr.progress_pct}%</div>
                       <Link href={`/student/course/${enr.course?.id}`} style={{ textDecoration:'none' }}>
-                        <button style={{ padding:'4px 12px', background: enr.status==='completed' ? 'rgba(62,232,122,0.1)' : 'rgba(74,158,255,0.1)', border:`1.5px solid ${enr.status==='completed' ? '#3ee87a' : '#4a9eff'}`, borderRadius:'7px', fontSize:'11.5px', fontWeight:600, color: enr.status==='completed' ? '#3ee87a' : '#4a9eff', cursor:'pointer' }}>
+                        <button className="press-btn" style={{ padding:'4px 12px', background: enr.status==='completed' ? 'rgba(62,232,122,0.1)' : 'rgba(74,158,255,0.1)', border:`1.5px solid ${enr.status==='completed' ? '#3ee87a' : '#4a9eff'}`, borderRadius:'7px', fontSize:'11.5px', fontWeight:600, color: enr.status==='completed' ? '#3ee87a' : '#4a9eff', cursor:'pointer' }}>
                           {enr.status === 'completed' ? 'Review' : 'Resume'}
                         </button>
                       </Link>
@@ -241,7 +241,7 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Weekly Activity */}
-            <Card style={{ padding:cardPad }}>
+            <Card className="anim-slide-up d2" style={{ padding:cardPad }}>
               <SectionHeader title="Weekly activity" subtitle="Learning sessions this week" />
               <div style={{ display:'flex', alignItems:'flex-end', gap: isMobile ? '4px' : '10px', height:'100px' }}>
                 {BARS.map((b, i) => (
@@ -256,11 +256,11 @@ export default function StudentDashboard() {
 
             {/* Badges */}
             {badges.length > 0 && (
-              <Card style={{ padding:cardPad }}>
+              <Card className="anim-slide-up d3" style={{ padding:cardPad }}>
                 <SectionHeader title="My badges" subtitle="Achievements earned" />
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px' }}>
-                  {badges.map(b => (
-                    <div key={b.id} style={{ textAlign:'center', padding:'12px 8px', background:'rgba(74,158,255,0.05)', borderRadius:'10px', border:'1px solid rgba(74,158,255,0.12)' }}>
+                  {badges.map((b, i) => (
+                    <div key={b.id} className={`hover-lift anim-scale-in d${Math.min(i+1,6)}`} style={{ textAlign:'center', padding:'12px 8px', background:'rgba(74,158,255,0.05)', borderRadius:'10px', border:'1px solid rgba(74,158,255,0.12)' }}>
                       <div style={{ fontSize:'24px', marginBottom:'4px' }}>{b.badge?.icon || '🏅'}</div>
                       <div style={{ fontSize:'11px', fontWeight:600, color:'#1a1a2e', lineHeight:1.3 }}>{b.badge?.name}</div>
                     </div>
@@ -274,7 +274,7 @@ export default function StudentDashboard() {
           <div style={{ display:'flex', flexDirection:'column', gap }}>
 
             {/* XP Progress */}
-            <Card style={{ padding:cardPad }}>
+            <Card className="anim-slide-up d1" style={{ padding:cardPad }}>
               <SectionHeader title="Learning Score" subtitle="Your XP progress" />
               <div style={{ marginBottom:'12px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'8px' }}>
@@ -306,7 +306,7 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Quick links */}
-            <Card style={{ padding:cardPad }}>
+            <Card className="anim-slide-up d2" style={{ padding:cardPad }}>
               <SectionHeader title="Quick actions" />
               <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
                 {[
@@ -316,7 +316,7 @@ export default function StudentDashboard() {
                   { label:'Account settings',        href:'/student/settings',                icon:'⚙️', color:'#3ee87a', bg:'rgba(62,232,122,0.08)' },
                 ].map(a => (
                   <Link key={a.label} href={a.href} style={{ textDecoration:'none' }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:'12px', padding:'11px 14px', background:a.bg, borderRadius:'10px', cursor:'pointer' }}>
+                    <div className="row-hover" style={{ display:'flex', alignItems:'center', gap:'12px', padding:'11px 14px', background:a.bg, borderRadius:'10px', cursor:'pointer' }}>
                       <span style={{ fontSize:'18px' }}>{a.icon}</span>
                       <span style={{ fontSize:'13.5px', fontWeight:600, color:a.color }}>{a.label}</span>
                     </div>
@@ -326,7 +326,7 @@ export default function StudentDashboard() {
             </Card>
 
             {/* Announcements */}
-            <Card style={{ padding:cardPad }}>
+            <Card className="anim-slide-up d3" style={{ padding:cardPad }}>
               <SectionHeader title="Announcements" />
               {[
                 { title:'Welcome to the Bootcamp!', body:'We are thrilled to have you. Explore the courses and start learning today.', time:'Just now', dot:'#4a9eff' },
@@ -347,10 +347,10 @@ export default function StudentDashboard() {
             {isMobile && (
               <div style={{ display:'flex', gap:'10px' }}>
                 <Link href="/courses" style={{ textDecoration:'none', flex:1 }}>
-                  <button style={{ width:'100%', padding:'11px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>Browse</button>
+                  <button className="press-btn" style={{ width:'100%', padding:'11px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>Browse</button>
                 </Link>
                 <Link href={enrollments[0] ? `/student/course/${enrollments[0].course?.id}` : '/courses'} style={{ textDecoration:'none', flex:1 }}>
-                  <button style={{ width:'100%', padding:'11px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'13px', fontWeight:700, color:'#fff', cursor:'pointer' }}>Continue</button>
+                  <button className="press-btn" style={{ width:'100%', padding:'11px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'13px', fontWeight:700, color:'#fff', cursor:'pointer' }}>Continue</button>
                 </Link>
               </div>
             )}
