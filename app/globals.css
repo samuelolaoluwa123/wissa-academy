@@ -72,6 +72,17 @@
 }
 .anim-pulse { animation: pulseSoft 1.4s var(--ease-in-out) infinite; }
 
+.gradient-text {
+  background: linear-gradient(100deg, #4a9eff 10%, #3ee87a 45%, #8c64ff 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.navbar-shell {
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
 .row-hover {
   transition: background 0.2s ease, transform 0.15s var(--ease-out);
 }
