@@ -34,7 +34,6 @@ export default function QuizCountdown({ quiz, onStart }) {
     padding: isMobile ? 16 : 20,
     color: '#ffffff',
   }
-
   const labelStyle = {
     fontSize: 13,
     color: '#8a94a6',
@@ -48,7 +47,7 @@ export default function QuizCountdown({ quiz, onStart }) {
 
   if (state.status === 'unscheduled') {
     return (
-      <div style={containerStyle}>
+      <div className="anim-fade-in" style={containerStyle}>
         <div style={labelStyle}>Quiz Status</div>
         <div style={{ ...valueStyle, color: '#8a94a6' }}>
           Schedule not yet set by tutor
@@ -59,7 +58,7 @@ export default function QuizCountdown({ quiz, onStart }) {
 
   if (state.status === 'upcoming') {
     return (
-      <div style={containerStyle}>
+      <div className="anim-fade-in" style={containerStyle}>
         <div style={labelStyle}>Quiz Status</div>
         <div style={{ ...valueStyle, color: '#f5a623' }}>
           Quiz opens in {formatCountdown(state.msUntilStart)}
@@ -70,13 +69,17 @@ export default function QuizCountdown({ quiz, onStart }) {
 
   if (state.status === 'live') {
     return (
-      <div style={containerStyle}>
-        <div style={labelStyle}>Quiz Status</div>
+      <div className="anim-fade-in" style={containerStyle}>
+        <div style={{ ...labelStyle, display:'flex', alignItems:'center', gap:'6px' }}>
+          <span className="anim-pulse" style={{ width:7, height:7, borderRadius:'50%', background:'#3ee87a', display:'inline-block' }} />
+          Quiz Status
+        </div>
         <div style={{ ...valueStyle, color: '#3ee87a', marginBottom: 12 }}>
           Quiz is live — closes in {formatCountdown(state.msUntilEnd)}
         </div>
         <button
           onClick={onStart}
+          className="press-btn"
           style={{
             backgroundColor: '#4a9eff',
             color: '#ffffff',
@@ -108,7 +111,7 @@ export default function QuizCountdown({ quiz, onStart }) {
     : 'a future date'
 
   return (
-    <div style={containerStyle}>
+    <div className="anim-fade-in" style={containerStyle}>
       <div style={labelStyle}>Quiz Status</div>
       <div style={{ ...valueStyle, color: '#e84040' }}>
         Quiz closed. Next attempt opens {nextText}

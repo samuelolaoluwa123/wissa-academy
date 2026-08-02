@@ -48,14 +48,14 @@ function QuizTopbar({ isMobile, showTimer, secondsLeft, timerRed }) {
   return (
     <div style={{ position:'fixed', top:0, left:0, right:0, height:60, background:'#0f1b2d', display:'flex', alignItems:'center', paddingLeft: isMobile ? '16px' : '32px', paddingRight: isMobile ? '16px' : '32px', gap:'12px', zIndex:100, borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
       <Link href="/courses" style={{ textDecoration:'none' }}>
-        <button style={{ background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', paddingTop:'6px', paddingBottom:'6px', paddingLeft:'14px', paddingRight:'14px', borderRadius:'8px', color:'rgba(255,255,255,0.75)', fontSize:'13px' }}>← Back</button>
+        <button className="press-btn" style={{ background:'rgba(255,255,255,0.08)', border:'none', cursor:'pointer', paddingTop:'6px', paddingBottom:'6px', paddingLeft:'14px', paddingRight:'14px', borderRadius:'8px', color:'rgba(255,255,255,0.75)', fontSize:'13px' }}>← Back</button>
       </Link>
       <div style={{ flex:1, textAlign:'center' }}>
         <div style={{ color:'#fff', fontWeight:700, fontSize: isMobile ? '13px' : '15px' }}>{QUIZ_META.title}</div>
         {!isMobile && <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'11.5px', marginTop:'1px' }}>{QUIZ_META.course} · {QUIZ_META.module}</div>}
       </div>
       {showTimer ? (
-        <div style={{ paddingTop:'6px', paddingBottom:'6px', paddingLeft:'14px', paddingRight:'14px', borderRadius:'8px', minWidth:'70px', textAlign:'center', background: timerRed ? 'rgba(232,64,64,0.15)' : 'rgba(255,255,255,0.08)', border: timerRed ? '1px solid rgba(232,64,64,0.4)' : '1px solid transparent' }}>
+        <div className={timerRed ? 'anim-pulse' : ''} style={{ paddingTop:'6px', paddingBottom:'6px', paddingLeft:'14px', paddingRight:'14px', borderRadius:'8px', minWidth:'70px', textAlign:'center', background: timerRed ? 'rgba(232,64,64,0.15)' : 'rgba(255,255,255,0.08)', border: timerRed ? '1px solid rgba(232,64,64,0.4)' : '1px solid transparent', transition:'background 0.3s ease, border-color 0.3s ease' }}>
           <div style={{ color: timerRed ? '#e84040' : '#fff', fontWeight:700, fontSize:'16px' }}>{mins}:{secs}</div>
         </div>
       ) : <div style={{ width:70 }} />}
@@ -100,6 +100,7 @@ function QuizPageContent() {
   const [quizLoading, setQuizLoading] = useState(true)
   const [starting, setStarting]     = useState(false)
   const [startError, setStartError] = useState(null)
+  const [ringReady, setRingReady]   = useState(false)
 
   const timerRef      = useRef(null)
   const startTimeRef  = useRef(null)
@@ -110,6 +111,15 @@ function QuizPageContent() {
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
+
+  useEffect(() => {
+    if (screen === 'results') {
+      setRingReady(false)
+      const t = setTimeout(() => setRingReady(true), 80)
+      return () => clearTimeout(t)
+    }
+    setRingReady(false)
+  }, [screen])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -275,8 +285,8 @@ function QuizPageContent() {
         <div style={{ paddingTop: isMobile ? '80px' : '100px', paddingBottom: isMobile ? '40px' : '60px', paddingLeft: isMobile ? '16px' : '24px', paddingRight: isMobile ? '16px' : '24px', display:'flex', alignItems:'flex-start', justifyContent:'center', minHeight:'100vh' }}>
           <div style={{ width:'100%', maxWidth:640 }}>
             {/* Hero */}
-            <div style={{ background:'#0f1b2d', borderRadius:'20px', padding: isMobile ? '28px 20px' : '40px 48px', marginBottom:'20px', position:'relative', overflow:'hidden' }}>
-              <div style={{ position:'absolute', top:-60, right:-60, width:220, height:220, borderRadius:'50%', background:'radial-gradient(circle,rgba(74,158,255,0.12),transparent 70%)', pointerEvents:'none' }} />
+            <div className="anim-slide-up" style={{ background:'#0f1b2d', borderRadius:'20px', padding: isMobile ? '28px 20px' : '40px 48px', marginBottom:'20px', position:'relative', overflow:'hidden' }}>
+              <div className="anim-pulse" style={{ position:'absolute', top:-60, right:-60, width:220, height:220, borderRadius:'50%', background:'radial-gradient(circle,rgba(74,158,255,0.12),transparent 70%)', pointerEvents:'none' }} />
               <div style={{ position:'relative' }}>
                 <div style={{ width:60, height:60, borderRadius:'16px', background:'rgba(74,158,255,0.15)', border:'1px solid rgba(74,158,255,0.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'28px', marginBottom:'20px' }}>✏️</div>
                 <div style={{ fontSize:'12px', fontWeight:700, letterSpacing:'1.5px', color:'rgba(255,255,255,0.4)', textTransform:'uppercase', marginBottom:'8px' }}>{QUIZ_META.course}</div>
@@ -288,8 +298,8 @@ function QuizPageContent() {
                     { icon:'⏱', label:'Time limit', val:`${QUIZ_META.timeLimitMins} min` },
                     { icon:'🎯', label:'Pass mark', val:`${QUIZ_META.passMark}%` },
                     { icon:'📊', label:'Topic', val:QUIZ_META.topic },
-                  ].map(s => (
-                    <div key={s.label} style={{ background:'rgba(255,255,255,0.06)', borderRadius:'12px', padding:'12px 14px' }}>
+                  ].map((s, i) => (
+                    <div key={s.label} className={`hover-lift anim-scale-in d${i+1}`} style={{ background:'rgba(255,255,255,0.06)', borderRadius:'12px', padding:'12px 14px' }}>
                       <div style={{ fontSize:'18px', marginBottom:'6px' }}>{s.icon}</div>
                       <div style={{ fontSize:'15px', fontWeight:700, color:'#fff', marginBottom:'2px' }}>{s.val}</div>
                       <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.4)' }}>{s.label}</div>
@@ -312,10 +322,10 @@ function QuizPageContent() {
             )}
 
             {/* Rules */}
-            <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '20px' : '28px', marginBottom:'20px' }}>
+            <div className="anim-slide-up d1" style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '20px' : '28px', marginBottom:'20px' }}>
               <h2 style={{ fontSize:'15px', fontWeight:700, color:'#1a1a2e', margin:'0 0 16px' }}>📋 Before you start</h2>
               {QUIZ_META.rules.map((rule, i) => (
-                <div key={i} style={{ display:'flex', gap:'12px', alignItems:'flex-start', marginBottom: i < QUIZ_META.rules.length-1 ? '12px' : '0' }}>
+                <div key={i} className={`anim-fade-in d${Math.min(i+1,6)}`} style={{ display:'flex', gap:'12px', alignItems:'flex-start', marginBottom: i < QUIZ_META.rules.length-1 ? '12px' : '0' }}>
                   <div style={{ width:22, height:22, borderRadius:'50%', flexShrink:0, background:'rgba(74,158,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'11px', fontWeight:700, color:'#4a9eff' }}>{i+1}</div>
                   <span style={{ fontSize:'13.5px', color:'#444', lineHeight:1.5, paddingTop:'2px' }}>{rule}</span>
                 </div>
@@ -323,13 +333,13 @@ function QuizPageContent() {
             </div>
 
             {/* Warning */}
-            <div style={{ background:'rgba(245,166,35,0.08)', border:'1px solid rgba(245,166,35,0.25)', borderRadius:'12px', padding:'14px 18px', display:'flex', gap:'10px', alignItems:'flex-start', marginBottom:'24px' }}>
+            <div className="anim-fade-in d2" style={{ background:'rgba(245,166,35,0.08)', border:'1px solid rgba(245,166,35,0.25)', borderRadius:'12px', padding:'14px 18px', display:'flex', gap:'10px', alignItems:'flex-start', marginBottom:'24px' }}>
               <span style={{ fontSize:'16px', flexShrink:0 }}>⚠️</span>
               <span style={{ fontSize:'13px', color:'#1a1a2e', lineHeight:1.5 }}>Once you click <strong>Start Quiz</strong>, your timer begins and cannot be paused.</span>
             </div>
 
             {startError && (
-              <div style={{ background:'rgba(232,64,64,0.08)', border:'1px solid rgba(232,64,64,0.25)', borderRadius:'12px', padding:'12px 16px', marginBottom:'16px', fontSize:'13px', color:'#e84040' }}>
+              <div className="anim-fade-in" style={{ background:'rgba(232,64,64,0.08)', border:'1px solid rgba(232,64,64,0.25)', borderRadius:'12px', padding:'12px 16px', marginBottom:'16px', fontSize:'13px', color:'#e84040' }}>
                 {startError}
               </div>
             )}
@@ -339,6 +349,7 @@ function QuizPageContent() {
               <button
                 onClick={handleStart}
                 disabled={starting || quizLoading}
+                className="press-btn"
                 style={{ width:'100%', padding:'15px', background: starting ? '#8fb8e8' : 'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'12px', color:'#fff', fontWeight:700, fontSize:'16px', cursor: starting ? 'default' : 'pointer', boxShadow:'0 6px 20px rgba(74,158,255,0.4)' }}
               >
                 {starting ? 'Loading questions...' : 'Start Quiz →'}
@@ -362,27 +373,27 @@ function QuizPageContent() {
       <div style={{ minHeight:'100vh', background:'#eef1f6', fontFamily:'Inter,sans-serif' }}>
         <QuizTopbar isMobile={isMobile} showTimer secondsLeft={secondsLeft} timerRed={timerRed} />
         <div style={{ position:'fixed', top:60, left:0, right:0, height:3, background:'#e2e6ed', zIndex:99 }}>
-          <div style={{ height:'100%', background:'#4a9eff', width:`${((current+1)/questions.length)*100}%`, transition:'width 0.3s ease' }} />
+          <div style={{ height:'100%', background:'#4a9eff', width:`${((current+1)/questions.length)*100}%`, transition:'width 0.35s var(--ease-out)' }} />
         </div>
         <div style={{ paddingTop: isMobile ? '80px' : '90px', paddingBottom:'120px', paddingLeft: isMobile ? '16px' : '24px', paddingRight: isMobile ? '16px' : '24px', display:'flex', justifyContent:'center' }}>
           <div style={{ width:'100%', maxWidth:680 }}>
             {/* Dots */}
             <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', justifyContent:'center', marginBottom:'24px' }}>
               {questions.map((_, i) => (
-                <button key={i} onClick={() => setCurrent(i)} style={{ width:36, height:36, borderRadius:'50%', cursor:'pointer', fontSize:'13px', fontWeight:700, background: i===current ? '#4a9eff' : answers[i]!==undefined ? 'rgba(74,158,255,0.2)' : '#fff', color: i===current ? '#fff' : answers[i]!==undefined ? '#4a9eff' : '#8a94a6', border: i===current ? 'none' : '1.5px solid #e2e6ed' }}>{i+1}</button>
+                <button key={i} onClick={() => setCurrent(i)} className="press-btn" style={{ width:36, height:36, borderRadius:'50%', cursor:'pointer', fontSize:'13px', fontWeight:700, background: i===current ? '#4a9eff' : answers[i]!==undefined ? 'rgba(74,158,255,0.2)' : '#fff', color: i===current ? '#fff' : answers[i]!==undefined ? '#4a9eff' : '#8a94a6', border: i===current ? 'none' : '1.5px solid #e2e6ed', transition:'background 0.2s ease, color 0.2s ease' }}>{i+1}</button>
               ))}
             </div>
 
             {/* Question */}
-            <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '20px' : '32px', marginBottom:'16px' }}>
+            <div key={current} className="anim-fade-in" style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '20px' : '32px', marginBottom:'16px' }}>
               <div style={{ fontSize:'11px', fontWeight:700, letterSpacing:'1px', color:'#4a9eff', textTransform:'uppercase', marginBottom:'12px' }}>Question {current+1} of {questions.length}</div>
               <p style={{ fontSize: isMobile ? '15px' : '17px', fontWeight:600, color:'#1a1a2e', lineHeight:1.5, margin:'0 0 24px' }}>{q.q}</p>
               <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
                 {q.options.map((opt, oi) => {
                   const selected = selectedAnswer === oi
                   return (
-                    <button key={oi} onClick={() => handleAnswer(oi)} style={{ width:'100%', padding:'14px 18px', background: selected ? 'rgba(74,158,255,0.08)' : '#fafbfc', border:`2px solid ${selected ? '#4a9eff' : '#e2e6ed'}`, borderRadius:'12px', cursor:'pointer', display:'flex', alignItems:'center', gap:'12px', textAlign:'left' }}>
-                      <div style={{ width:28, height:28, borderRadius:'50%', flexShrink:0, background: selected ? '#4a9eff' : '#fff', border:`2px solid ${selected ? '#4a9eff' : '#e2e6ed'}`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, color: selected ? '#fff' : '#8a94a6' }}>
+                    <button key={oi} onClick={() => handleAnswer(oi)} className="press-btn option-btn" style={{ width:'100%', padding:'14px 18px', background: selected ? 'rgba(74,158,255,0.08)' : '#fafbfc', border:`2px solid ${selected ? '#4a9eff' : '#e2e6ed'}`, borderRadius:'12px', cursor:'pointer', display:'flex', alignItems:'center', gap:'12px', textAlign:'left', transition:'background 0.2s ease, border-color 0.2s ease' }}>
+                      <div style={{ width:28, height:28, borderRadius:'50%', flexShrink:0, background: selected ? '#4a9eff' : '#fff', border:`2px solid ${selected ? '#4a9eff' : '#e2e6ed'}`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:700, color: selected ? '#fff' : '#8a94a6', transition:'background 0.2s ease, border-color 0.2s ease' }}>
                         {selected ? '✓' : String.fromCharCode(65+oi)}
                       </div>
                       <span style={{ fontSize:'14px', fontWeight: selected ? 600 : 400, color: selected ? '#1a1a2e' : '#444' }}>{opt}</span>
@@ -401,15 +412,21 @@ function QuizPageContent() {
 
         {/* Bottom nav */}
         <div style={{ position:'fixed', bottom:0, left:0, right:0, background:'#fff', borderTop:'1px solid #e2e6ed', paddingTop: isMobile ? '12px' : '14px', paddingBottom: isMobile ? '12px' : '14px', paddingLeft: isMobile ? '16px' : '32px', paddingRight: isMobile ? '16px' : '32px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:'12px', zIndex:100 }}>
-          <button onClick={() => setCurrent(c => Math.max(0,c-1))} disabled={current===0} style={{ paddingTop:'10px', paddingBottom:'10px', paddingLeft:'24px', paddingRight:'24px', borderRadius:'10px', border:'1.5px solid #e2e6ed', background:'#fff', cursor: current===0 ? 'not-allowed' : 'pointer', fontSize:'14px', fontWeight:600, color: current===0 ? '#b0b8c8' : '#1a1a2e' }}>← Previous</button>
+          <button onClick={() => setCurrent(c => Math.max(0,c-1))} disabled={current===0} className="press-btn" style={{ paddingTop:'10px', paddingBottom:'10px', paddingLeft:'24px', paddingRight:'24px', borderRadius:'10px', border:'1.5px solid #e2e6ed', background:'#fff', cursor: current===0 ? 'not-allowed' : 'pointer', fontSize:'14px', fontWeight:600, color: current===0 ? '#b0b8c8' : '#1a1a2e' }}>← Previous</button>
           {current < questions.length-1 ? (
-            <button onClick={() => setCurrent(c => c+1)} disabled={selectedAnswer===undefined} style={{ paddingTop:'10px', paddingBottom:'10px', paddingLeft:'28px', paddingRight:'28px', borderRadius:'10px', border:'none', background: selectedAnswer!==undefined ? 'linear-gradient(135deg,#4a9eff,#2563eb)' : '#e2e6ed', cursor: selectedAnswer!==undefined ? 'pointer' : 'not-allowed', fontSize:'14px', fontWeight:700, color: selectedAnswer!==undefined ? '#fff' : '#b0b8c8' }}>Next →</button>
+            <button onClick={() => setCurrent(c => c+1)} disabled={selectedAnswer===undefined} className="press-btn" style={{ paddingTop:'10px', paddingBottom:'10px', paddingLeft:'28px', paddingRight:'28px', borderRadius:'10px', border:'none', background: selectedAnswer!==undefined ? 'linear-gradient(135deg,#4a9eff,#2563eb)' : '#e2e6ed', cursor: selectedAnswer!==undefined ? 'pointer' : 'not-allowed', fontSize:'14px', fontWeight:700, color: selectedAnswer!==undefined ? '#fff' : '#b0b8c8' }}>Next →</button>
           ) : (
-            <button onClick={goToResults} disabled={!allAnswered} style={{ paddingTop:'10px', paddingBottom:'10px', paddingLeft:'28px', paddingRight:'28px', borderRadius:'10px', border:'none', background: allAnswered ? 'linear-gradient(135deg,#3ee87a,#1ab55c)' : '#e2e6ed', cursor: allAnswered ? 'pointer' : 'not-allowed', fontSize:'14px', fontWeight:700, color: allAnswered ? '#fff' : '#b0b8c8' }}>
+            <button onClick={goToResults} disabled={!allAnswered} className="press-btn" style={{ paddingTop:'10px', paddingBottom:'10px', paddingLeft:'28px', paddingRight:'28px', borderRadius:'10px', border:'none', background: allAnswered ? 'linear-gradient(135deg,#3ee87a,#1ab55c)' : '#e2e6ed', cursor: allAnswered ? 'pointer' : 'not-allowed', fontSize:'14px', fontWeight:700, color: allAnswered ? '#fff' : '#b0b8c8' }}>
               {allAnswered ? 'Submit Quiz ✓' : `${questions.length-answeredCount} unanswered`}
             </button>
           )}
         </div>
+
+        <style jsx>{`
+          :global(.option-btn:hover) {
+            border-color: #b8d4f5 !important;
+          }
+        `}</style>
       </div>
     )
   }
@@ -423,19 +440,19 @@ function QuizPageContent() {
       <div style={{ paddingTop: isMobile ? '80px' : '90px', paddingBottom:'60px', paddingLeft: isMobile ? '16px' : '40px', paddingRight: isMobile ? '16px' : '40px', maxWidth:800, margin:'0 auto' }}>
 
         {/* Score hero */}
-        <div style={{ background:'#0f1b2d', borderRadius:'20px', padding: isMobile ? '28px 20px' : '40px', marginBottom:'24px', textAlign:'center', position:'relative', overflow:'hidden' }}>
-          <div style={{ position:'absolute', top:-40, left:'50%', transform:'translateX(-50%)', width:300, height:300, borderRadius:'50%', background:`radial-gradient(circle,${passed?'rgba(62,232,122,0.1)':'rgba(232,64,64,0.08)'},transparent 70%)`, pointerEvents:'none' }} />
+        <div className="anim-slide-up" style={{ background:'#0f1b2d', borderRadius:'20px', padding: isMobile ? '28px 20px' : '40px', marginBottom:'24px', textAlign:'center', position:'relative', overflow:'hidden' }}>
+          <div className="anim-pulse" style={{ position:'absolute', top:-40, left:'50%', transform:'translateX(-50%)', width:300, height:300, borderRadius:'50%', background:`radial-gradient(circle,${passed?'rgba(62,232,122,0.1)':'rgba(232,64,64,0.08)'},transparent 70%)`, pointerEvents:'none' }} />
           <div style={{ position:'relative', width:130, height:130, margin:'0 auto 20px' }}>
             <svg width="130" height="130" style={{ transform:'rotate(-90deg)' }}>
               <circle cx="65" cy="65" r="54" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10"/>
-              <circle cx="65" cy="65" r="54" fill="none" stroke={passed?'#3ee87a':'#e84040'} strokeWidth="10" strokeDasharray={circumference} strokeDashoffset={dashOffset} strokeLinecap="round"/>
+              <circle className="score-ring" cx="65" cy="65" r="54" fill="none" stroke={passed?'#3ee87a':'#e84040'} strokeWidth="10" strokeDasharray={circumference} strokeDashoffset={ringReady ? dashOffset : circumference} strokeLinecap="round" style={{ transition:'stroke-dashoffset 1s var(--ease-out)' }}/>
             </svg>
             <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
               <div style={{ fontSize:'28px', fontWeight:900, color:'#fff', lineHeight:1 }}>{scorePct}%</div>
               <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.4)', marginTop:'3px' }}>Score</div>
             </div>
           </div>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:'8px', padding:'6px 18px', borderRadius:'20px', background: passed?'rgba(62,232,122,0.15)':'rgba(232,64,64,0.15)', border:`1px solid ${passed?'rgba(62,232,122,0.3)':'rgba(232,64,64,0.3)'}`, marginBottom:'12px' }}>
+          <div className="anim-scale-in d2" style={{ display:'inline-flex', alignItems:'center', gap:'8px', padding:'6px 18px', borderRadius:'20px', background: passed?'rgba(62,232,122,0.15)':'rgba(232,64,64,0.15)', border:`1px solid ${passed?'rgba(62,232,122,0.3)':'rgba(232,64,64,0.3)'}`, marginBottom:'12px' }}>
             <span style={{ fontSize:'16px' }}>{passed?'🎉':'📚'}</span>
             <span style={{ fontSize:'14px', fontWeight:700, color: passed?'#3ee87a':'#e84040' }}>{passed?'Quiz Passed!':'Not Passed'}</span>
           </div>
@@ -444,23 +461,23 @@ function QuizPageContent() {
         </div>
 
         {/* Buttons */}
-        <div style={{ display:'flex', gap:'12px', marginBottom:'28px', flexWrap:'wrap' }}>
-          <button onClick={handleRetry} style={{ flex:1, minWidth:140, padding:'12px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'14px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>🔄 Retry Quiz</button>
+        <div className="anim-fade-in d1" style={{ display:'flex', gap:'12px', marginBottom:'28px', flexWrap:'wrap' }}>
+          <button onClick={handleRetry} className="press-btn" style={{ flex:1, minWidth:140, padding:'12px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'14px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>🔄 Retry Quiz</button>
           {passed && (
             <Link href="/courses" style={{ textDecoration:'none', flex:1, minWidth:140 }}>
-              <button style={{ width:'100%', padding:'12px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'14px', fontWeight:700, color:'#fff', cursor:'pointer' }}>▶ Next Lesson</button>
+              <button className="press-btn" style={{ width:'100%', padding:'12px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'14px', fontWeight:700, color:'#fff', cursor:'pointer' }}>▶ Next Lesson</button>
             </Link>
           )}
         </div>
 
         {/* Review */}
-        <div style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '20px' : '28px' }}>
+        <div className="anim-slide-up d2" style={{ background:'#fff', borderRadius:'16px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '20px' : '28px' }}>
           <h2 style={{ fontSize:'16px', fontWeight:700, color:'#1a1a2e', margin:'0 0 20px' }}>Question Review</h2>
           {questions.map((q, i) => {
             const userAns   = answers[i]
             const isCorrect = userAns === q.answer
             return (
-              <div key={i} style={{ marginBottom: i<questions.length-1?'20px':'0', paddingBottom: i<questions.length-1?'20px':'0', borderBottom: i<questions.length-1?'1px solid #f0f0f0':'none' }}>
+              <div key={i} className={`anim-fade-in d${Math.min(i+1,6)}`} style={{ marginBottom: i<questions.length-1?'20px':'0', paddingBottom: i<questions.length-1?'20px':'0', borderBottom: i<questions.length-1?'1px solid #f0f0f0':'none' }}>
                 <div style={{ display:'flex', gap:'10px', marginBottom:'10px' }}>
                   <div style={{ width:24, height:24, borderRadius:'50%', flexShrink:0, background: isCorrect?'rgba(62,232,122,0.15)':'rgba(232,64,64,0.12)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', color: isCorrect?'#3ee87a':'#e84040' }}>{isCorrect?'✓':'✗'}</div>
                   <span style={{ fontSize:'13.5px', fontWeight:600, color:'#1a1a2e', lineHeight:1.4 }}>{i+1}. {q.q}</span>

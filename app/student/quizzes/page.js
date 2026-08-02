@@ -78,7 +78,10 @@ export default function QuizzesHubPage() {
   if (loading) {
     return (
       <DashboardShell role="student">
-        <div style={{ padding:'40px', textAlign:'center', color:'#8a94a6', fontSize:'14px' }}>Loading quizzes...</div>
+        <div style={{ padding:'60px', textAlign:'center' }}>
+          <div className="anim-pulse" style={{ fontSize:'28px', marginBottom:'10px' }}>📝</div>
+          <div style={{ color:'#8a94a6', fontSize:'14px' }}>Loading quizzes...</div>
+        </div>
       </DashboardShell>
     )
   }
@@ -86,13 +89,15 @@ export default function QuizzesHubPage() {
   return (
     <DashboardShell role="student">
     <div style={{ padding: isMobile ? '20px 16px' : '32px 40px' }}>
-      <h1 style={{ fontSize: isMobile ? '20px' : '24px', fontWeight:800, color:'#1a1a2e', margin:'0 0 4px' }}>Quizzes</h1>
-      <p style={{ fontSize:'13.5px', color:'#8a94a6', margin:'0 0 24px' }}>
-        All quizzes across your enrolled courses, in one place.
-      </p>
+      <div className="anim-slide-up">
+        <h1 style={{ fontSize: isMobile ? '20px' : '24px', fontWeight:800, color:'#1a1a2e', margin:'0 0 4px' }}>Quizzes</h1>
+        <p style={{ fontSize:'13.5px', color:'#8a94a6', margin:'0 0 24px' }}>
+          All quizzes across your enrolled courses, in one place.
+        </p>
+      </div>
 
       {quizzes.length === 0 && (
-        <div style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding:'40px 24px', textAlign:'center' }}>
+        <div className="anim-fade-in" style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding:'40px 24px', textAlign:'center' }}>
           <div style={{ fontSize:'32px', marginBottom:'12px' }}>📝</div>
           <div style={{ fontSize:'14px', color:'#8a94a6' }}>
             No quizzes yet. Enrol in a course and progress through lessons to unlock quizzes here.
@@ -101,13 +106,13 @@ export default function QuizzesHubPage() {
       )}
 
       <div style={{ display:'flex', flexDirection:'column', gap:'12px' }}>
-        {quizzes.map(quiz => {
+        {quizzes.map((quiz, i) => {
           const attempted = !!attemptedIds[quiz.id]
           const state = getQuizWindowState(quiz)
           const canTake = state.status === 'unscheduled' || state.status === 'live'
 
           const cardInner = (
-            <div style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '16px' : '18px 22px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'16px', flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
+            <div className="hover-lift" style={{ background:'#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding: isMobile ? '16px' : '18px 22px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'16px', flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
               <div style={{ minWidth:0 }}>
                 <div style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.5px', color:'#4a9eff', textTransform:'uppercase', marginBottom:'4px' }}>
                   {quiz.course?.title || 'Course'}{quiz.lesson?.module?.title ? ` · ${quiz.lesson.module.title}` : ''}
@@ -130,12 +135,16 @@ export default function QuizzesHubPage() {
             </div>
           )
 
-          return canTake ? (
-            <Link key={quiz.id} href={`/student/quiz?quizId=${quiz.id}`} style={{ textDecoration:'none' }}>
-              {cardInner}
-            </Link>
-          ) : (
-            <div key={quiz.id} style={{ opacity:0.75 }}>{cardInner}</div>
+          return (
+            <div key={quiz.id} className={`anim-slide-up d${Math.min(i+1,6)}`}>
+              {canTake ? (
+                <Link href={`/student/quiz?quizId=${quiz.id}`} style={{ textDecoration:'none' }}>
+                  {cardInner}
+                </Link>
+              ) : (
+                <div style={{ opacity:0.75 }}>{cardInner}</div>
+              )}
+            </div>
           )
         })}
       </div>
