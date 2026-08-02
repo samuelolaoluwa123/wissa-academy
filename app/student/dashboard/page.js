@@ -38,12 +38,18 @@ function SectionHeader({ title, subtitle, action, actionHref }) {
   )
 }
 
-function StatCard({ label, value, pill, pillColor, dark, className = '' }) {
+function StatCard({ icon, label, value, pill, pillColor, dark, className = '' }) {
   const pillBg   = { blue:'rgba(74,158,255,0.15)', green:'rgba(62,232,122,0.15)', amber:'rgba(245,166,35,0.15)', purple:'rgba(140,100,255,0.15)' }
   const pillText = { blue:'#4a9eff', green:'#3ee87a', amber:'#f5a623', purple:'#8c64ff' }
+  const iconBg   = { blue:'rgba(74,158,255,0.12)', green:'rgba(62,232,122,0.12)', amber:'rgba(245,166,35,0.12)', purple:'rgba(140,100,255,0.12)' }
   return (
     <div className={`hover-lift ${className}`} style={{ background: dark ? '#1a2d45' : '#fff', borderRadius:'14px', border:'1px solid rgba(0,0,0,0.07)', padding:'20px 22px' }}>
-      <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'1px', textTransform:'uppercase', color: dark ? 'rgba(255,255,255,0.4)' : '#8a94a6', marginBottom:'8px' }}>{label}</div>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'14px' }}>
+        <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'1px', textTransform:'uppercase', color: dark ? 'rgba(255,255,255,0.4)' : '#8a94a6' }}>{label}</div>
+        {icon && (
+          <div style={{ width:30, height:30, borderRadius:'9px', flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'14px', background: dark ? 'rgba(255,255,255,0.08)' : (iconBg[pillColor] || iconBg.blue) }}>{icon}</div>
+        )}
+      </div>
       <div style={{ fontSize:'36px', fontWeight:900, color: dark ? '#fff' : '#1a1a2e', lineHeight:1, marginBottom:'10px' }}>{value}</div>
       <span style={{ display:'inline-block', padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:700, background: pillBg[pillColor] || pillBg.blue, color: pillText[pillColor] || pillText.blue }}>{pill}</span>
     </div>
@@ -161,25 +167,33 @@ export default function StudentDashboard() {
       <div style={{ paddingTop:pad, paddingLeft:pad, paddingRight:pad, paddingBottom:'40px' }}>
 
         {/* Header */}
-        <div className="anim-slide-up" style={{ display:'flex', justifyContent:'space-between', alignItems: isMobile ? 'flex-start' : 'center', flexDirection: isMobile ? 'column' : 'row', gap:'12px', marginBottom: isMobile ? '16px' : '24px' }}>
-          <div>
-            <div style={{ fontSize:'11px', fontWeight:700, letterSpacing:'1.5px', color:'#8a94a6', textTransform:'uppercase', marginBottom:'4px' }}>STUDENT PORTAL</div>
-            <h1 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight:800, color:'#1a1a2e', margin:'0 0 4px', letterSpacing:'-0.5px' }}>
+        <div className="anim-slide-up" style={{
+          position:'relative', overflow:'hidden',
+          background:'linear-gradient(135deg,#0f1b2d 0%,#16273e 55%,#1a2d45 100%)',
+          borderRadius:'18px', padding: isMobile ? '22px 20px' : '30px 32px',
+          marginBottom: isMobile ? '16px' : '22px',
+          display:'flex', justifyContent:'space-between', alignItems: isMobile ? 'flex-start' : 'center',
+          flexDirection: isMobile ? 'column' : 'row', gap:'16px',
+        }}>
+          <div className="anim-pulse" style={{ position:'absolute', top:-90, right:-60, width:260, height:260, borderRadius:'50%', background:'radial-gradient(circle,rgba(74,158,255,0.22),transparent 70%)', pointerEvents:'none' }} />
+          <div style={{ position:'relative' }}>
+            <div style={{ fontSize:'11px', fontWeight:700, letterSpacing:'1.5px', color:'rgba(255,255,255,0.4)', textTransform:'uppercase', marginBottom:'6px' }}>Student Portal</div>
+            <h1 style={{ fontSize: isMobile ? '22px' : '28px', fontWeight:800, color:'#fff', margin:'0 0 6px', letterSpacing:'-0.5px' }}>
               Hello, <span style={{ fontWeight:900 }}>{displayName}</span> 👋
             </h1>
-            <div style={{ fontSize:'13px', color:'#8a94a6', display:'flex', alignItems:'center', gap:'10px', flexWrap:'wrap' }}>
+            <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.55)', display:'flex', alignItems:'center', gap:'10px', flexWrap:'wrap' }}>
               <span>Apps & Scripts Summer Bootcamp</span>
               {streak > 0 && (
-                <span style={{ display:'inline-flex', alignItems:'center', gap:'4px', background:'rgba(245,166,35,0.1)', color:'#f5a623', fontWeight:700, fontSize:'12px', padding:'2px 10px', borderRadius:'20px' }}>
+                <span style={{ display:'inline-flex', alignItems:'center', gap:'4px', background:'rgba(245,166,35,0.18)', color:'#f5a623', fontWeight:700, fontSize:'12px', padding:'2px 10px', borderRadius:'20px' }}>
                   🔥 {streak}-day streak
                 </span>
               )}
             </div>
           </div>
           {!isMobile && (
-            <div style={{ display:'flex', gap:'10px', flexShrink:0 }}>
+            <div style={{ position:'relative', display:'flex', gap:'10px', flexShrink:0 }}>
               <Link href="/courses" style={{ textDecoration:'none' }}>
-                <button className="press-btn" style={{ padding:'9px 18px', background:'#fff', border:'1.5px solid #e2e6ed', borderRadius:'10px', fontSize:'13px', fontWeight:600, color:'#1a1a2e', cursor:'pointer' }}>Browse courses</button>
+                <button className="press-btn" style={{ padding:'9px 18px', background:'rgba(255,255,255,0.08)', border:'1.5px solid rgba(255,255,255,0.15)', borderRadius:'10px', fontSize:'13px', fontWeight:600, color:'#fff', cursor:'pointer' }}>Browse courses</button>
               </Link>
               <Link href={enrollments[0] ? `/student/course/${enrollments[0].course?.id}` : '/courses'} style={{ textDecoration:'none' }}>
                 <button className="press-btn" style={{ padding:'9px 18px', background:'linear-gradient(135deg,#4a9eff,#2563eb)', border:'none', borderRadius:'10px', fontSize:'13px', fontWeight:700, color:'#fff', cursor:'pointer', boxShadow:'0 4px 14px rgba(74,158,255,0.35)' }}>Continue learning</button>
@@ -190,14 +204,14 @@ export default function StudentDashboard() {
 
         {/* Stat cards */}
         <div style={{ display:'grid', gridTemplateColumns:statsGrid, gap, marginBottom:gap }}>
-          <StatCard className="anim-scale-in d1" label="Learning Score (XP)" value={xp.toLocaleString()} pill={xp >= 1000 ? 'Level 2' : `Next: 1000`} pillColor="green" dark />
-          <StatCard className="anim-scale-in d2" label="Courses Enrolled"  value={enrollments.length} pill={enrollments.filter(e=>e.status==='active').length > 0 ? `${enrollments.filter(e=>e.status==='active').length} in progress` : 'None yet'} pillColor="blue" />
-          <StatCard className="anim-scale-in d3" label="Hours Learned"     value={`${hoursLearned}h`} pill={streak > 0 ? `🔥 ${streak} day streak` : 'Start learning'} pillColor="amber" />
-          <StatCard className="anim-scale-in d4" label="Certificates"      value={certCount} pill={certCount > 0 ? 'Earned' : 'Complete a course'} pillColor="purple" />
+          <StatCard icon="🎯" className="anim-scale-in d1" label="Learning Score (XP)" value={xp.toLocaleString()} pill={xp >= 1000 ? 'Level 2' : `Next: 1000`} pillColor="green" dark />
+          <StatCard icon="📚" className="anim-scale-in d2" label="Courses Enrolled"  value={enrollments.length} pill={enrollments.filter(e=>e.status==='active').length > 0 ? `${enrollments.filter(e=>e.status==='active').length} in progress` : 'None yet'} pillColor="blue" />
+          <StatCard icon="⏱️" className="anim-scale-in d3" label="Hours Learned"     value={`${hoursLearned}h`} pill={streak > 0 ? `🔥 ${streak} day streak` : 'Start learning'} pillColor="amber" />
+          <StatCard icon="🏆" className="anim-scale-in d4" label="Certificates"      value={certCount} pill={certCount > 0 ? 'Earned' : 'Complete a course'} pillColor="purple" />
         </div>
 
         {/* Body */}
-        <div style={{ display:'grid', gridTemplateColumns:twoCol, gap }}>
+        <div style={{ display:'grid', gridTemplateColumns:twoCol, gap, alignItems:'start' }}>
 
           {/* LEFT */}
           <div style={{ display:'flex', flexDirection:'column', gap }}>
@@ -243,21 +257,31 @@ export default function StudentDashboard() {
             {/* Weekly Activity */}
             <Card className="anim-slide-up d2" style={{ padding:cardPad }}>
               <SectionHeader title="Weekly activity" subtitle="Learning sessions this week" />
-              <div style={{ display:'flex', alignItems:'flex-end', gap: isMobile ? '4px' : '10px', height:'100px' }}>
+              <div style={{ display:'flex', alignItems:'flex-end', gap: isMobile ? '4px' : '10px', height:'100px', borderBottom:'1px solid #f0f2f5', paddingBottom:'2px' }}>
                 {BARS.map((b, i) => (
                   <div key={b.day} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:'4px', height:'100%', justifyContent:'flex-end' }}>
                     <div style={{ fontSize:'9px', color:'#8a94a6', fontWeight:600 }}>{b.h}h</div>
-                    <div className={`bar-rise d${Math.min(i+1,6)}`} style={{ width:'100%', maxWidth:28, height:`${(b.h/5)*68}px`, background: b.day==='Fri' ? '#4a9eff' : 'rgba(74,158,255,0.18)', borderRadius:'5px 5px 0 0' }} />
-                    <div style={{ fontSize:'9px', color:'#8a94a6' }}>{b.day}</div>
+                    <div className={`bar-rise d${Math.min(i+1,6)}`} style={{ width:'100%', maxWidth:28, height:`${(b.h/5)*68}px`, background: b.day==='Fri' ? 'linear-gradient(180deg,#4a9eff,#2563eb)' : 'rgba(74,158,255,0.16)', borderRadius:'5px 5px 0 0' }} />
                   </div>
+                ))}
+              </div>
+              <div style={{ display:'flex', gap: isMobile ? '4px' : '10px', marginTop:'6px' }}>
+                {BARS.map(b => (
+                  <div key={b.day} style={{ flex:1, textAlign:'center', fontSize:'9px', color: b.day==='Fri' ? '#4a9eff' : '#8a94a6', fontWeight: b.day==='Fri' ? 700 : 400 }}>{b.day}</div>
                 ))}
               </div>
             </Card>
 
             {/* Badges */}
-            {badges.length > 0 && (
-              <Card className="anim-slide-up d3" style={{ padding:cardPad }}>
-                <SectionHeader title="My badges" subtitle="Achievements earned" />
+            <Card className="anim-slide-up d3" style={{ padding:cardPad }}>
+              <SectionHeader title="My badges" subtitle="Achievements earned" />
+              {badges.length === 0 ? (
+                <div style={{ textAlign:'center', padding:'20px 0' }}>
+                  <div style={{ fontSize:'32px', marginBottom:'8px' }}>🏅</div>
+                  <div style={{ fontWeight:600, fontSize:'13.5px', color:'#1a1a2e', marginBottom:'4px' }}>No badges yet</div>
+                  <div style={{ fontSize:'12.5px', color:'#8a94a6' }}>Complete a lesson to earn your first one</div>
+                </div>
+              ) : (
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px' }}>
                   {badges.map((b, i) => (
                     <div key={b.id} className={`hover-lift anim-scale-in d${Math.min(i+1,6)}`} style={{ textAlign:'center', padding:'12px 8px', background:'rgba(74,158,255,0.05)', borderRadius:'10px', border:'1px solid rgba(74,158,255,0.12)' }}>
@@ -266,8 +290,8 @@ export default function StudentDashboard() {
                     </div>
                   ))}
                 </div>
-              </Card>
-            )}
+              )}
+            </Card>
           </div>
 
           {/* RIGHT */}

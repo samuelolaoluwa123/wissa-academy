@@ -128,9 +128,9 @@ export default function Sidebar({ role: roleProp, isMobile, isTablet, mobileOpen
             {section.items.map((item) => {
               const active = pathname === item.href
               return (
-                <Link key={item.label} href={item.href} onClick={isMobile ? onClose : undefined} style={{ display:'flex', alignItems:'center', gap:'10px', padding: isTablet ? '11px 0' : '10px 20px', justifyContent: isTablet ? 'center' : 'flex-start', background: active ? 'rgba(74,158,255,0.13)' : 'transparent', borderLeft: active && !isTablet ? '3px solid #4a9eff' : '3px solid transparent', textDecoration:'none', position:'relative', transition:'background 0.15s' }} title={isTablet ? item.label : undefined}>
-                  <span style={{ color: active ? '#4a9eff' : 'rgba(255,255,255,0.5)', display:'flex', alignItems:'center', flexShrink:0 }}><NavIcon name={item.icon} /></span>
-                  {showLabels && <span style={{ fontSize:'13.5px', fontWeight: active ? 600 : 400, color: active ? '#fff' : 'rgba(255,255,255,0.65)', whiteSpace:'nowrap', flex:1 }}>{item.label}</span>}
+                <Link key={item.label} href={item.href} onClick={isMobile ? onClose : undefined} className={`nav-item${active ? ' active' : ''}`} style={{ display:'flex', alignItems:'center', gap:'10px', padding: isTablet ? '11px 0' : '10px 20px', justifyContent: isTablet ? 'center' : 'flex-start', background: active ? 'rgba(74,158,255,0.13)' : 'transparent', borderLeft: active && !isTablet ? '3px solid #4a9eff' : '3px solid transparent', textDecoration:'none', position:'relative', transition:'background 0.18s ease, border-color 0.18s ease' }} title={isTablet ? item.label : undefined}>
+                  <span style={{ color: active ? '#4a9eff' : 'rgba(255,255,255,0.5)', display:'flex', alignItems:'center', flexShrink:0, transition:'color 0.18s ease' }}><NavIcon name={item.icon} /></span>
+                  {showLabels && <span style={{ fontSize:'13.5px', fontWeight: active ? 600 : 400, color: active ? '#fff' : 'rgba(255,255,255,0.65)', whiteSpace:'nowrap', flex:1, transition:'color 0.18s ease' }}>{item.label}</span>}
                   {item.dot && showLabels && <span style={{ width:7, height:7, borderRadius:'50%', background:'#e84040', flexShrink:0 }} />}
                   {item.dot && isTablet && <span style={{ position:'absolute', top:8, right:10, width:7, height:7, borderRadius:'50%', background:'#e84040' }} />}
                 </Link>
@@ -144,12 +144,14 @@ export default function Sidebar({ role: roleProp, isMobile, isTablet, mobileOpen
         <button
           onClick={handleLogout}
           title={isTablet ? 'Logout' : undefined}
+          className="logout-btn"
           style={{
             width:'100%', display:'flex', alignItems:'center', gap:'10px',
             justifyContent: isTablet ? 'center' : 'flex-start',
             padding: isTablet ? '10px 0' : '9px 10px',
             background:'none', border:'none', cursor:'pointer',
             borderRadius:'8px', marginBottom:'10px',
+            transition:'background 0.18s ease',
           }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink:0, color:'rgba(255,255,255,0.5)' }}>
@@ -179,6 +181,18 @@ export default function Sidebar({ role: roleProp, isMobile, isTablet, mobileOpen
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        :global(.nav-item:not(.active):hover) {
+          background: rgba(255, 255, 255, 0.06) !important;
+        }
+        :global(.logout-btn:hover) {
+          background: rgba(232, 64, 64, 0.1) !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.nav-item), :global(.logout-btn) { transition: none !important; }
+        }
+      `}</style>
     </aside>
   )
 }
